@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VBC - Our Products</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #2c2c2c;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo::before {
+            content: "◆";
+            margin-right: 0.5rem;
+            color: #ff0000;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ff0000;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 25px;
+            background-color: #f5f5f5;
+            color: #333;
+            width: 300px;
+        }
+
+        .search-btn {
+            background-color: #ff0000;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            color: #2c2c2c;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .filter-section {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .category-filter {
+            padding: 0.5rem 1rem;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-filter:hover {
+            border-color: #ff0000;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+
+        .product-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
+            transform: translateX(-100%);
+            transition: transform 0.6s;
+            z-index: 1;
+        }
+
+        .product-card:hover .product-image::before {
+            transform: translateX(100%);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1.5rem;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2c2c2c;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-category {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stars {
+            color: #ffd700;
+        }
+
+        .rating-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            flex: 1;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #2c2c2c;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a1a1a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #ff0000;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background-color: #2c2c2c;
+            color: white;
+            padding: 3rem 2rem 1rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #ff0000;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #444;
+            color: #999;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color:#ff0000;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #28a745;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-box {
+                width: 200px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">VBC</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="products1.html">Products</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="cart.html">Cart</a></li>
+            <li><a href="user.html">User Dashboard</a></li>
+            <li><a href="admin.html">Admin Dashboard</a></li>
+        </ul>
+        <div class="search-container">
+            <input type="text" class="search-box" placeholder="Search for products..." id="searchInput">
+            <button class="search-btn" onclick="searchProducts()">🔍</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 class="page-title">Our Products</h1>
+        
+        <div class="filter-section">
+            <select class="category-filter" id="categoryFilter" onchange="filterProducts()">
+                <option value="all">All Categories</option>
+                <option value="beauty">Beauty & Cosmetics</option>
+                <option value="fashion">Fashion & Dresses</option>
+                <option value="appliances">Home Appliances</option>
+                <option value="electronics">Electronics</option>
+                <option value="jewelry">Jewelry & Accessories</option>
+                <option value="health">Health & Wellness</option>
+                <option value="home">Home & Living</option>
+                <option value="sports">Sports & Fitness</option>
+            </select>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be dynamically loaded here -->
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="index.html">Home</a>
+                <a href="aboutus.html">About Us</a>
+                <a href="products1.html">Products</a>
+                <a href="contact.html">Contact</a>
+                <a href="user.html">User Dashboard</a>
+                <a href="admin.html">Admin Dashboard</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Vashundhra Beauty Collection. All rights reserved</p>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            // Beauty & Cosmetics
+            {
+                name: "Luxury Foundation Set",
+                category: "beauty",
+                price: 2499,
+                image: "https://www.ogbeauty.in/cdn/shop/files/OG_Luxury_Pack_of_4_20ml_Elite_Aura_Listing_Image_1_1.jpg?v=1722927390",
+                description: "Professional makeup foundation with long-lasting coverage and natural finish.",
+                rating: 4.8,
+                reviews: 234,
+                discount: "20% OFF"
+            },
+            {
+                name: "Skincare Essentials Kit",
+                category: "beauty",
+                price: 1899,
+                image: "https://www.leablack.com/cdn/shop/files/skincare-essentials-kit.jpg?v=1744902554&width=416",
+                description: "Complete skincare routine with cleanser, toner, serum, and moisturizer.",
+                rating: 4.7,
+                reviews: 156
+            },
+            {
+                name: "Professional Makeup Brushes",
+                category: "beauty",
+                price: 899,
+                image: "https://upload.joomcdn.net/f095694d0b2604c18fb2577ecc1a0ea167d1c27d_original.jpeg",
+                description: "Set of 12 high-quality makeup brushes for professional results.",
+                rating: 4.9,
+                reviews: 89
+            },
+            {
+                name: "Anti-Aging Serum",
+                category: "beauty",
+                price: 3299,
+                image: "https://images-static.nykaa.com/media/catalog/product/f/1/f1e21ab6923700958621_1.jpg",
+                description: "Advanced anti-aging serum with vitamin C and hyaluronic acid.",
+                rating: 4.6,
+                reviews: 167,
+                discount: "15% OFF"
+            },
+            {
+                name: "Lipstick Collection",
+                category: "beauty",
+                price: 1299,
+                image: "https://goodchoiceindia.com/cdn/shop/files/01_f5d00d59-4d84-43a9-9224-0c9c9706415e.jpg?v=1745041562",
+                description: "Set of 6 long-lasting lipsticks in trending colors.",
+                rating: 4.5,
+                reviews: 203
+            },
+
+            // Fashion & Dresses
+            {
+                name: "Designer Evening Gown",
+                category: "fashion",
+                price: 4999,
+                image: "https://www.suzanneneville.com/site/assets/files/4580/20230613_s09-002_c_venni-fn.770x1154.jpg",
+                description: "Elegant evening gown perfect for special occasions and parties.",
+                rating: 4.8,
+                reviews: 67
+            },
+            {
+                name: "Casual Summer Dress",
+                category: "fashion",
+                price: 1599,
+                image: "https://m.media-amazon.com/images/I/91mS3GxhsML._UY1100_.jpg",
+                description: "Comfortable and stylish summer dress for everyday wear.",
+                rating: 4.6,
+                reviews: 124,
+                discount: "25% OFF"
+            },
+            {
+                name: "Business Formal Suit",
+                category: "fashion",
+                price: 6999,
+                image: "https://www.sainly.com/cdn/shop/products/MenSuitsOnionPink3PieceSlimFitSuitElegantFormalFashionSuitsSainly-2023-04-10T130753.265_800x.png?v=1681117860",
+                description: "Professional business suit with jacket and trousers.",
+                rating: 4.7,
+                reviews: 45
+            },
+            {
+                name: "Bohemian Maxi Dress",
+                category: "fashion",
+                price: 2299,
+                image: "https://littlewish.in/wp-content/uploads/2024/09/WhatsApp-Image-2024-08-21-at-9.13.00-AM.jpeg",
+                description: "Flowy bohemian style maxi dress with floral patterns.",
+                rating: 4.4,
+                reviews: 89
+            },
+            {
+                name: "Party Cocktail Dress",
+                category: "fashion",
+                price: 3499,
+                image: "https://images-cdn.ubuy.co.in/66ea67a79baee074d14be95d-sodopo-plus-size-sparkly-cocktail-party.jpg",
+                description: "Stunning cocktail dress perfect for parties and events.",
+                rating: 4.9,
+                reviews: 78
+            },
+
+            // Home Appliances
+            {
+                name: "Smart Coffee Maker",
+                category: "appliances",
+                price: 8999,
+                image: "https://m.media-amazon.com/images/I/81n90uFkJiL._UF894,1000_QL80_.jpg",
+                description: "WiFi-enabled coffee maker with app control and multiple brewing options.",
+                rating: 4.5,
+                reviews: 312
+            },
+            {
+                name: "Air Fryer Pro",
+                category: "appliances",
+                price: 5999,
+                image: "https://images-cdn.ubuy.co.in/65def1025a885718544309c6-xiaomi-smart-air-fryer-pro-4l-air.jpg",
+                description: "Large capacity air fryer for healthy cooking without oil.",
+                rating: 4.7,
+                reviews: 245,
+                discount: "30% OFF"
+            },
+            {
+                name: "Robot Vacuum Cleaner",
+                category: "appliances",
+                price: 12999,
+                image: "https://www.electrolux.com.au/globalassets/article/robotic-vacuum-cleaner-contender/robotic-contender-og.jpg",
+                description: "Smart robot vacuum with mapping and automatic cleaning.",
+                rating: 4.6,
+                reviews: 189
+            },
+            {
+                name: "Instant Pot Multi-Cooker",
+                category: "appliances",
+                price: 7499,
+                image: "https://www.seriouseats.com/thmb/j1IKShp0-E624iVF16NX2-EazdQ=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/sea-primary-instant-pots-oct-24-nsimpson-1019-55b51f13c76049f09e38ccba5e45c7cc.jpeg",
+                description: "7-in-1 multi-cooker for pressure cooking, slow cooking, and more.",
+                rating: 4.8,
+                reviews: 456
+            },
+            {
+                name: "Smart Refrigerator",
+                category: "appliances",
+                price: 45999,
+                image: "https://www.bonprixelectromenagers.com/cdn/shop/articles/the-pros-and-cons-of-smart-fridges-578102_345x345@2x.jpg?v=1728771446",
+                description: "Energy-efficient smart refrigerator with touch screen and WiFi.",
+                rating: 4.3,
+                reviews: 67
+            },
+
+            // Electronics
+            {
+                name: "Wireless Earbuds Pro",
+                category: "electronics",
+                price: 3999,
+                image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=400&h=300&fit=crop",
+                description: "Premium wireless earbuds with noise cancellation and long battery life.",
+                rating: 4.6,
+                reviews: 567,
+                discount: "20% OFF"
+            },
+            {
+                name: "Smart Watch Ultra",
+                category: "electronics",
+                price: 12999,
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=300&fit=crop",
+                description: "Advanced smartwatch with fitness tracking and health monitoring.",
+                rating: 4.7,
+                reviews: 234
+            },
+            {
+                name: "Laptop Gaming Beast",
+                category: "electronics",
+                price: 75999,
+                image: "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&h=300&fit=crop",
+                description: "High-performance gaming laptop with RTX graphics and fast processor.",
+                rating: 4.8,
+                reviews: 89
+            },
+            {
+                name: "Portable Speaker",
+                category: "electronics",
+                price: 2499,
+                image: "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=400&h=300&fit=crop",
+                description: "Waterproof Bluetooth speaker with 360-degree sound.",
+                rating: 4.5,
+                reviews: 345
+            },
+
+            // Jewelry & Accessories
+            {
+                name: "Diamond Necklace",
+                category: "jewelry",
+                price: 15999,
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
+                description: "Elegant diamond necklace with sterling silver chain.",
+                rating: 4.9,
+                reviews: 23
+            },
+            {
+                name: "Gold Earrings Set",
+                category: "jewelry",
+                price: 8999,
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=300&fit=crop",
+                description: "Beautiful gold earrings set with traditional design.",
+                rating: 4.7,
+                reviews: 45
+            },
+            {
+                name: "Luxury Watch",
+                category: "jewelry",
+                price: 25999,
+                image: "https://images.unsplash.com/photo-1524592094714-0f0654e20314?w=400&h=300&fit=crop",
+                description: "Premium luxury watch with automatic movement and sapphire crystal.",
+                rating: 4.8,
+                reviews: 34,
+                discount: "10% OFF"
+            },
+            {
+                name: "Pearl Bracelet",
+                category: "jewelry",
+                price: 4999,
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop",
+                description: "Elegant pearl bracelet with gold clasp and premium finish.",
+                rating: 4.6,
+                reviews: 67
+            },
+
+            // Health & Wellness
+            {
+                name: "Yoga Mat Premium",
+                category: "health",
+                price: 1999,
+                image: "https://www.cockatooindia.com/cdn/shop/files/615SO3eSEDL._SL1400.jpg?v=1737374340&width=1400",
+                description: "Non-slip yoga mat with extra cushioning and carrying strap.",
+                rating: 4.7,
+                reviews: 234
+            },
+            {
+                name: "Protein Supplement",
+                category: "health",
+                price: 2799,
+                image: "https://images.unsplash.com/photo-1593095948071-474c5cc2989d?w=400&h=300&fit=crop",
+                description: "High-quality whey protein powder for muscle building and recovery.",
+                rating: 4.5,
+                reviews: 456,
+                discount: "15% OFF"
+            },
+            {
+                name: "Essential Oils Set",
+                category: "health",
+                price: 1499,
+                image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=400&h=300&fit=crop",
+                description: "Set of 6 pure essential oils for aromatherapy and relaxation.",
+                rating: 4.8,
+                reviews: 123
+            },
+            {
+                name: "Fitness Tracker",
+                category: "health",
+                price: 3499,
+                image: "https://images.unsplash.com/photo-1575311373937-040b8e1fd5b6?w=400&h=300&fit=crop",
+                description: "Advanced fitness tracker with heart rate monitoring and GPS.",
+                rating: 4.6,
+                reviews: 234
+            },
+
+            // Home & Living
+            {
+                name: "Luxury Bedsheet Set",
+                category: "home",
+                price: 2999,
+                image: "https://images.meesho.com/images/products/406205869/t1vvi_512.webp",
+                description: "Premium cotton bedsheet set with pillow covers and comfort fit.",
+                rating: 4.7,
+                reviews: 189
+            },
+            {
+                name: "Decorative Vase",
+                category: "home",
+                price: 899,
+                image: "https://www.dekorcompany.com/cdn/shop/files/S80622-05P.png?v=1697544974",
+                description: "Handcrafted ceramic vase perfect for home decoration.",
+                rating: 4.5,
+                reviews: 67
+            },
+            {
+                name: "LED Table Lamp",
+                category: "home",
+                price: 1599,
+                image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=400&h=300&fit=crop",
+                description: "Modern LED table lamp with adjustable brightness and USB charging.",
+                rating: 4.6,
+                reviews: 145,
+                discount: "20% OFF"
+            },
+            {
+                name: "Throw Pillow Set",
+                category: "home",
+                price: 799,
+                image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
+                description: "Set of 4 decorative throw pillows with removable covers.",
+                rating: 4.4,
+                reviews: 89
+            },
+
+            // Sports & Fitness
+            {
+                name: "Dumbbell Set",
+                category: "sports",
+                price: 4999,
+                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+                description: "Adjustable dumbbell set with multiple weight plates and secure locks.",
+                rating: 4.8,
+                reviews: 167
+            },
+            {
+                name: "Running Shoes Pro",
+                category: "sports",
+                price: 3999,
+                image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=300&fit=crop",
+                description: "Professional running shoes with advanced cushioning and support.",
+                rating: 4.7,
+                reviews: 234,
+                discount: "25% OFF"
+            },
+            {
+                name: "Sports Water Bottle",
+                category: "sports",
+                price: 599,
+                image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?w=400&h=300&fit=crop",
+                description: "Insulated sports water bottle with leak-proof design.",
+                rating: 4.5,
+                reviews: 345
+            },
+            {
+                name: "Resistance Bands Kit",
+                category: "sports",
+                price: 1299,
+                image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop",
+                description: "Complete resistance bands kit for strength training at home.",
+                rating: 4.6,
+                reviews: 123
+            }
+        ];
+
+        let currentProducts = [...products];
+
+        function displayProducts(productsToShow) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+
+            productsToShow.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                // Create image content based on whether URL exists or not
+                let imageContent = '';
+                if (isValidImageUrl(product.image)) {
+                    imageContent = `<img src="${product.image}" alt="${product.name}" onerror="this.parentElement.innerHTML='<div class=\\'image-placeholder\\'>${product.name.charAt(0)}</div>'">`;
+                } else {
+                    imageContent = `<div class="image-placeholder">${product.name.charAt(0)}</div>`;
+                }
+                
+                productCard.innerHTML = `
+                    ${product.discount ? `<div class="discount-badge">${product.discount}</div>` : ''}
+                    <div class="category-badge">${getCategoryName(product.category)}</div>
+                    <div class="product-image">${imageContent}</div>
+                    <div class="product-info">
+                        <div class="product-category">${getCategoryName(product.category)}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price.toLocaleString()}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-rating">
+                            <div class="stars">${getStars(product.rating)}</div>
+                            <div class="rating-text">${product.rating} (${product.reviews} reviews)</div>
+                        </div>
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="viewDetails('${product.name}')">View Details</button>
+                            <button class="btn btn-secondary" onclick="addToCart('${product.name}')">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(productCard);
+            });
+        }
+
+        function isValidImageUrl(url) {
+            return url && (url.startsWith('http://') || url.startsWith('https://'));
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'beauty': 'Beauty & Cosmetics',
+                'fashion': 'Fashion & Dresses',
+                'appliances': 'Home Appliances',
+                'electronics': 'Electronics',
+                'jewelry': 'Jewelry & Accessories',
+                'health': 'Health & Wellness',
+                'home': 'Home & Living',
+                'sports': 'Sports & Fitness'
+            };
+            return categories[category] || category;
+        }
+
+        function getStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '⭐';
+            }
+            
+            if (hasHalfStar) {
+                stars += '⭐';
+            }
+            
+            return stars;
+        }
+
+        function filterProducts() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            
+            if (selectedCategory === 'all') {
+                currentProducts = [...products];
+            } else {
+                currentProducts = products.filter(product => product.category === selectedCategory);
+            }
+            
+            displayProducts(currentProducts);
+        }
+
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            if (searchTerm === '') {
+                currentProducts = [...products];
+            } else {
+                currentProducts = products.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm) ||
+                    getCategoryName(product.category).toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            displayProducts(currentProducts);
+        }
+
+        function viewDetails(productName) {
+            alert(`Viewing details for: ${productName}`);
+        }
+
+        function addToCart(productName) {
+            alert(`Added to cart: ${productName}`);
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayProducts(products);
+            
+            // Add search functionality on Enter key
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchProducts();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
